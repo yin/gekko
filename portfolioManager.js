@@ -39,6 +39,21 @@ var Manager = function(conf) {
   this.currency = conf.currency || 'USD';
   this.asset = conf.asset || 'BTC';
 
+  this.limits = {
+    trade: {
+      asset_max: false,
+      currency_max: false
+    },
+    portfolio: {
+      asset_min: false,
+      asset_max: false,
+      currency_min: false,
+      currency_max: false
+    }
+  };
+  _.extend(limits.trades, conf.limits.trade || {});
+  _.extend(limits.portfolio, conf.limits.portfolio || {});
+
   _.bindAll(this);
 
   log.debug('getting balance & fee from', this.exchange.name);
@@ -122,6 +137,10 @@ Manager.prototype.trade = function(what) {
       else
         amount = this.getBalance(this.currency) / this.ticker.ask;
 
+      if(!conf.limits) {
+        amount = limitAmount(what, amount);
+      }
+
       // can we just create a MKT order?
       if(this.directExchange)
         price = false;
@@ -152,6 +171,10 @@ Manager.prototype.trade = function(what) {
     this.setPortfolio
   ], _.bind(act, this));
 
+}
+
+Manager.prototype.limitAmount = function(what, amount) {
+    this.conf
 }
 
 Manager.prototype.getMinimum = function(price) {

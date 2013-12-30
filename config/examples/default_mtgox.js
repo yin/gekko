@@ -112,6 +112,18 @@ config.traders = [
     secret: '',
     currency: 'USD',
     asset: 'BTC',
+    limits: {
+      trade: {
+        asset_max: 0.025
+        currency_max: 25.00
+      },
+      portfolio: {
+        asset_min: false,
+        asset_max: 0.75,
+        currency_min: 50.00,
+        currency_max: false
+      }
+    }
     enabled: false
   },
   {
