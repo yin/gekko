@@ -21,7 +21,7 @@
     "async": "0.2.x",
     "nedb": "*",
     "line-reader": "0.2.x",
-    "buffalo": "0.1.3"
+    "buffalo": "0.1.3",
     "nodeunit": "0.8.2"
   },
   "engines": { "node": "0.10.x" },

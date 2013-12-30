@@ -2,31 +2,31 @@
 // var async = require('async');
 var BUF_SIZE = 1024*1024;
 var BSON_FILE = "test-07.bson"
+var GEN_RANGE = 1440 * 10;
 var _ = require('lodash');
-var bufallo = require('bufallo');
+var buffalo = require('buffalo');
 var fs = require('fs');
  
 var candles = [];
 
 var checkpoints = [];
-var start;
+var last;
 
 var time_now = function(note){
     var precision = 3;
     var elapsed;
 
-    if (!start) {
-       start = process.hrtime();
-       return;
+    if (checkpoints.length > 0) {
+	var last = checkpoints[checkpoints.length - 1];
+	var diff = process.hrtime(last);
+	elapsed = diff[0] * 1000 + diff[1] / 100000;
+	console.log("Elapsed: " + elapsed.toFixed(precision) + " ms - " + note);
     }
-    start = process.hrtime(start);
-    checkponts.push(start);
-    elapsed = start[0] * 1000 + start[1] / 100000;
-    console.log("Elapsed: " + elapsed.toFixed(precision) + " ms - " + note);
+    checkpoints.push(process.hrtime());
 }
 
 time_now();
-_.each(_.range(1440), function(d) {
+_.each(_.range(GEN_RANGE), function(d) {
 	var candle = {
 		s: d,
 		o: Math.random() * 1000,
@@ -36,11 +36,16 @@ _.each(_.range(1440), function(d) {
 		v: Math.random() * 1000,
 		p: Math.random() * 1000
 	};
- 
 	candles.push(candle);
 });
+
+console.log("Going to generate " + GEN_RANGE  + " candles and store them as BSON.");
+
 time_now('creating candles');
-var buf = bufallo.serialize(candles);
+var buf = buffalo.serialize(candles);
 time_now('serializing BSON');
-fs.writeSync(BSON_FILE);
+fs.writeSync(BSON_FILE, buf);
 time_now('writting file');
+
+console.log("Buffer content: ");
+console.log(buf);
