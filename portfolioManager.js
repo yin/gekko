@@ -174,7 +174,33 @@ Manager.prototype.trade = function(what) {
 }
 
 Manager.prototype.limitAmount = function(what, amount) {
-    this.conf
+  var trade = this.limits.trade;
+  var pfolio = this.limits.protfolio;
+  if (trade !== false) {
+      if (trade.asset_max !== false) {
+	  if (amount > trade.asset_max) {
+	      amount = trade.asset_max;
+	  }
+      }
+      if (trade.currency_max !== false) {
+	  var currency_max = trade.currency_max / this.ticker.ask;
+	  if (amount > currency_max) {
+	      amount = currency_max;
+	  }
+      }
+  }
+  if (pfolio !== false) {
+    var order_sign = (what == 'SELL') : +1 : -1;
+    var current_asset = this.getFund(this.asset);
+    var current_currency = this.getFund(this.currency);
+    var future_asset = current_asset + order_sign*amount;
+    var future_currency = current_currency + order_sign*amount;
+    var padding_asset = 
+    
+    if (pfolio.asset_min !== false) {
+      if (future
+    }
+  }
 }
 
 Manager.prototype.getMinimum = function(price) {

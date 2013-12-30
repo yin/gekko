@@ -95,6 +95,7 @@ var configureManagers = function(_next) {
     if(invalid)
       throw invalid;
 
+    conf.
     log.info(
       'Trading for real money based on market advice at',
       conf.exchange

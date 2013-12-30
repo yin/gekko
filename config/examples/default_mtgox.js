@@ -119,7 +119,7 @@ config.traders = [
       },
       portfolio: {
         asset_min: false,
-        asset_max: 0.75,
+        asset_max: 1.5,
         currency_min: 50.00,
         currency_max: false
       }
